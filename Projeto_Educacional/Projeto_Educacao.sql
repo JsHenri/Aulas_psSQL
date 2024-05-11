@@ -22,43 +22,43 @@ CREATE TABLE Alunos (--feito
     Estado VARCHAR(20),
     CEP INT,
     Pais VARCHAR(20)
-)
+);
 
 CREATE TABLE Telefones (--feito
     CPF_Aluno VARCHAR(15) REFERENCES Alunos,
     Cod_Pais INT,
     DDD INT,
     Numero INT
-
-)
+);
 
 CREATE TABLE EMails (--feito
     CPF_Aluno VARCHAR(15) REFERENCES Alunos,
     EMail VARCHAR(50),
     Dominio VARCHAR(20)
-)
+);
 
 CREATE TABLE Matriculas (--feito
 	RA SERIAL PRIMARY KEY,
-    FOREIGN KEY (CPF_Aluno) REFERENCES Alunos(CPF_Aluno),
-    FOREIGN KEY (Id_Curso) REFERENCES Cursos(Id_Curso),
+    CPF_Aluno VARCHAR(15) REFERENCES Alunos,
+    Id_Curso SERIAL REFERENCES Cursos,
     Status VARCHAR(10)
-)
+);
 
 CREATE TABLE Disciplinas (--feito
 	Id_Disciplina SERIAL PRIMARY KEY,
 	Nome_Disciplina VARCHAR(100),
     Optativa BOOLEAN
-)
+);
+
 CREATE TABLE Curso_Disciplina (
-	FOREIGN KEY (Id_Curso) REFERENCES Cursos(Id_Curso),
-	FOREIGN KEY (Id_Disciplina) REFERENCES Disciplina(Id_Disciplina)
-)
+	Id_Curso SERIAL REFERENCES Cursos,
+	Id_Disciplina SERIAL REFERENCES Disciplinas
+);
 
 CREATE TABLE Matriculas_Cursos (
     RA SERIAL REFERENCES Matriculas,
     Id_Disciplina SERIAL REFERENCES Disciplinas
-)
+);
 
 INSERT INTO Alunos (CPF_Aluno, Nome_Aluno, Idade, Rua, Numero, Bairro, Cidade, Estado, CEP, Pais) VALUES 
 ('111.222.333-44', 'João Silva', 25, 'Rua das Flores', '123', 'Centro', 'São Paulo', 'SP', 123456, 'Brasil'),
@@ -80,6 +80,8 @@ INSERT INTO Departamentos (Sigla_Departamento, Nome_Departamento) VALUES
 ('ENGE','ENGENHARIA'),
 ('HUMA','HUMANAS')
 
+SELECT * FROM Departamentos
+
 INSERT INTO Cursos (Nome_Curso, Id_Departamento) VALUES 
 ('Medicina', 1),
 ('Enfermagem', 1),
@@ -91,6 +93,8 @@ INSERT INTO Cursos (Nome_Curso, Id_Departamento) VALUES
 ('Psicologia', 4),
 ('Administração', 4),
 ('Economia', 4);
+
+SELECT * FROM Cursos
 
 INSERT INTO Matriculas (CPF_Aluno, Id_Curso, Status) VALUES 
 ('111.222.333-44', 1, 'Ativo'),
@@ -104,7 +108,9 @@ INSERT INTO Matriculas (CPF_Aluno, Id_Curso, Status) VALUES
 ('999.000.111-22', 1, 'Formado'),
 ('000.111.222-33', 1, 'Inativo');
 
-INSERT INTO Disciplina (Nome_Disciplina, Optativa) VALUES 
+SELECT * FROM Matriculas
+
+INSERT INTO Disciplinas (Nome_Disciplina, Optativa) VALUES 
 ('Anatomia Humana', FALSE),  -- Saúde
 ('Fisiologia Humana', FALSE),  -- Saúde
 ('Bioquímica', FALSE),  -- Saúde
@@ -119,7 +125,7 @@ INSERT INTO Disciplina (Nome_Disciplina, Optativa) VALUES
 ('Direito Constitucional', FALSE),  -- Humanas
 ('Psicologia Social', FALSE),  -- Humanas
 ('Antropologia Cultural', TRUE),  -- Humanas
-('Filosofia Política', TRUE);  -- Humanas
+('Filosofia Política', TRUE),  -- Humanas
 ('Engenharia de Software', TRUE),  -- Tecnologia
 ('Introdução à Inteligência Artificial', TRUE),  -- Tecnologia
 ('Gestão de Projetos', TRUE),  -- Engenharia
@@ -127,7 +133,8 @@ INSERT INTO Disciplina (Nome_Disciplina, Optativa) VALUES
 ('Nutrição Esportiva', TRUE),  -- Saúde
 ('Terapias Alternativas', TRUE);  -- Saúde
 
--- Adicionando números de telefone para todos os alunos
+SELECT * FROM Disciplinas
+
 INSERT INTO Telefones (CPF_Aluno, Cod_Pais, DDD, Numero) VALUES 
 ('111.222.333-44', 55, 11, 123456789),  -- João Silva
 ('111.222.333-44', 55, 11, 987654321),  -- João Silva (segundo número)
@@ -139,7 +146,9 @@ INSERT INTO Telefones (CPF_Aluno, Cod_Pais, DDD, Numero) VALUES
 ('777.888.999-00', 55, 81, 999000111),  -- Lucas Oliveira
 ('888.999.000-11', 55, 51, 222333444),  -- Juliana Pereira
 ('999.000.111-22', 55, 61, 333444555),  -- Fernando Souza
-('000.111.222-33', 55, 92, 555666777);  -- Camila Santos
+('000.111.222-33', 55, 92, 555666777);
+
+SELECT * FROM Telefones
 
 INSERT INTO EMails (CPF_Aluno, EMail, Dominio) VALUES 
 ('111.222.333-44', 'joao.silva@gmail.com', 'gmail.com'),
@@ -156,56 +165,58 @@ INSERT INTO EMails (CPF_Aluno, EMail, Dominio) VALUES
 ('999.000.111-22', 'fernando.souza@gmail.com', 'gmail.com'),
 ('000.111.222-33', 'camila.santos@hotmail.com', 'hotmail.com');
 
--- Inserindo dados na tabela Curso_Disciplina
+SELECT * FROM EMails
 
--- Medicina
+--Medicina
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 1);  -- Anatomia Humana
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 2);  -- Fisiologia Humana
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 3);  -- Bioquímica
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 4);  -- Farmacologia
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 5);  -- Epidemiologia
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 21); -- Nutrição Esportiva
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 22); -- Terapias Alternativas
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 20); -- Nutrição Esportiva
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (1, 21); -- Terapias Alternativas
 
 -- Enfermagem
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 1);  -- Anatomia Humana
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 2);  -- Fisiologia Humana
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 3);  -- Bioquímica
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 5);  -- Epidemiologia
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 21); -- Nutrição Esportiva
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 22); -- Terapias Alternativas
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 20); -- Nutrição Esportiva
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (2, 21); -- Terapias Alternativas
 
 -- Engenharia de Software
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 6);  -- Algoritmos e Estruturas de Dados
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 7);  -- Banco de Dados
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 8);  -- Redes de Computadores
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 15); -- Engenharia de Software
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 16); -- Introdução à Inteligência Artificial
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 16); -- Engenharia de Software
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (3, 17); -- Introdução à Inteligência Artificial
 
 -- Ciência da Computação
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 6);  -- Algoritmos e Estruturas de Dados
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 7);  -- Banco de Dados
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 8);  -- Redes de Computadores
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 15); -- Engenharia de Software
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 16); -- Introdução à Inteligência Artificial
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 16); -- Engenharia de Software
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (4, 17); -- Introdução à Inteligência Artificial
 
 -- Engenharia Civil
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 9);  -- Engenharia Econômica
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 10); -- Eletromagnetismo
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 11); -- Álgebra Linear
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 17); -- Gestão de Projetos
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 18); -- Introdução à Robótica
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 18); -- Gestão de Projetos
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (5, 19); -- Introdução à Robótica
 
 -- Engenharia Elétrica
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 9);  -- Engenharia Econômica
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 10); -- Eletromagnetismo
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 11); -- Álgebra Linear
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 17); -- Gestão de Projetos
-INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 18); -- Introdução à Robótica
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 18); -- Gestão de Projetos
+INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (6, 19); -- Introdução à Robótica
 
 -- História
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (7, 12); -- Direito Constitucional
 INSERT INTO Curso_Disciplina (Id_Curso, Id_Disciplina) VALUES (7, 13); -- Psicologia Social
+
+SELECT * FROM Curso_Disciplina
 
 INSERT INTO Matriculas_Cursos (RA, Id_Disciplina) VALUES 
 (1, 1),  -- Anatomia Humana
@@ -229,7 +240,9 @@ INSERT INTO Matriculas_Cursos (RA, Id_Disciplina) VALUES
 (6, 17), -- Gestão de Projetos
 (6, 18), -- Introdução à Robótica
 (7, 12), -- Direito Constitucional
-(7, 13), -- Psicologia Social;
+(7, 13); -- Psicologia Social
+
+SELECT * FROM Matriculas_Cursos
 
 --Buscar todos os dados do aluno dado o CPF ou o Nome do Aluno:
 SELECT * FROM Alunos WHERE CPF_Aluno = '111.222.333-44' OR Nome_Aluno = 'João Silva';
@@ -242,33 +255,3 @@ WHERE Departamentos.Nome_Departamento = 'HUMANAS';
 SELECT Cursos.Nome_Curso FROM Cursos INNER JOIN Curso_Disciplina ON Cursos.Id_Curso = Curso_Disciplina.Id_Curso 
 INNER JOIN Disciplinas ON Curso_Disciplina.Id_Disciplina = Disciplinas.Id_Disciplina 
 WHERE Disciplinas.Nome_Disciplina = 'Introdução à Inteligência Artificial';
-
---Exibir quais disciplinas um aluno está cursando dado o CPF do aluno:
-SELECT Disciplinas.Nome_Disciplina FROM Disciplinas INNER JOIN Matriculas_Cursos ON Disciplinas.Id_Disciplina = Matriculas_Cursos.Id_Disciplina
-INNER JOIN Alunos ON Matriculas_Cursos.RA = Alunos.CPF_Aluno
-WHERE Alunos.CPF = '111.222.333-44';
-
---Filtrar todos os alunos matriculados em um determinado curso:
-SELECT * FROM Alunos INNER JOIN Matriculas ON Alunos.CPF_Aluno = Matriculas.RA
-INNER JOIN Cursos ON Matriculas.Id_Curso = Cursos.Id_Curso
-WHERE Cursos.Nome_Curso = 'Enfermagem';
---Filtrar todos os alunos matriculados em determinada disciplina:
-SELECT * FROM Alunos INNER JOIN Matriculas ON Alunos.CPF_Aluno = Matriculas.RA
-INNER JOIN Disciplinas ON Matriculas_Cursos.Id_Disciplina = Disciplinas.Id_Disciplina
-WHERE Disciplinas.Nome_Disciplina = 'Algoritmos e Estruturas de Dados';
-
---Filtrar alunos formados:
-SELECT * FROM Alunos WHERE Status = 'Formado';
-
---Filtrar alunos ativos:
-SELECT * FROM Alunos WHERE Status = 'Ativo';
-
---Apresentar a quantidade de alunos ativos por curso:
-SELECT Cursos.Nome_Curso, COUNT(*) AS Quantidade_Alunos_Ativos FROM Alunos INNER JOIN Matriculas ON Alunos.CPF_Aluno = Matriculas.RA
-INNER JOIN Cursos ON Matriculas.Id_Curso = Cursos.Id_Curso WHERE Alunos.Status = 'Ativo'
-GROUP BY Cursos.Nome;
-
---Apresentar a quantidade de alunos ativos por disciplina:
-SELECT Disciplinas.Nome_Disciplina, COUNT(*) AS Quantidade_Alunos_Ativos FROM Alunos INNER JOIN Matriculas ON Alunos.CPF_Aluno = Matriculas.RA
-INNER JOIN Disciplinas ON Matriculas.Id_Disciplina = Disciplinas.Id_Disciplina WHERE Alunos.Status = 'Ativo'
-GROUP BY Disciplinas.Nome_Disciplina;
